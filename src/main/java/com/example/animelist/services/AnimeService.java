@@ -29,8 +29,10 @@ public class AnimeService {
         return animeRepository.findById(id).get();
     }
 
-    public void saveAnime(String name, String russian, String url, String status, Date airedOn, Date releasedOn, String imageUrl){
-        Anime anime = new Anime(name, russian, url, status, airedOn, releasedOn, imageUrl);
+    public List<Anime> getAnimeByUrl(String url) {return animeRepository.findByUrl(url).get();}
+
+    public void saveAnime(String name, String url, String status, Date airedOn, Date releasedOn, String imageUrl){
+        Anime anime = new Anime(name, url, status, airedOn, releasedOn, imageUrl);
         animeRepository.save(anime);
     }
 }

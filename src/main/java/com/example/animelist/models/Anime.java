@@ -10,26 +10,23 @@ public class Anime {
     @Id
     @GeneratedValue
     private Long id;
-
     private String name;
-    private String russian;
     private String url;
     private String status;
-    private Date airedOn;
-    private Date releasedOn;
+    private Date startDate;
+    private Date endDate;
     private String imageUrl;
 
     public Anime(){
 
     }
 
-    public Anime(String name, String russian, String url, String status, Date airedOn, Date releasedOn, String imageUrl) {
+    public Anime(String name, String url, String status, Date startDate, Date endDate, String imageUrl) {
         this.name = name;
-        this.russian = russian;
         this.url = url;
         this.status = status;
-        this.airedOn = airedOn;
-        this.releasedOn = releasedOn;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.imageUrl = imageUrl;
     }
 
@@ -41,10 +38,6 @@ public class Anime {
         return name;
     }
 
-    public String getRussian() {
-        return russian;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -53,12 +46,12 @@ public class Anime {
         return status;
     }
 
-    public Date getAiredOn() {
-        return airedOn;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public Date getReleasedOn() {
-        return releasedOn;
+    public Date getEndDate() {
+        return endDate;
     }
 
     public String getImageUrl() {
