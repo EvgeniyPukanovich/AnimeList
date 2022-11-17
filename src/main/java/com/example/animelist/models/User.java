@@ -1,18 +1,28 @@
 package com.example.animelist.models;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name="my_users")
-public class User {
+public class User{
     @Id
     @GeneratedValue
     private Long id;
     private String username;
     private String password;
+    private String information;
     private boolean active;
+
+    @ElementCollection
+    @CollectionTable(name = "user_animes", joinColumns = @JoinColumn(name = "user_id"))
+    List<Anime> animeList = new ArrayList<>();
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -66,5 +76,21 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
+    }
+
+    public List<Anime> getAnimeList() {
+        return animeList;
+    }
+
+    public void setAnimeList(List<Anime> animeList) {
+        this.animeList = animeList;
     }
 }

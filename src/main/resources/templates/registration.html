@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head th:insert="layout :: headerFragment(${title})"></head>
+
+<body>
+    <div th:insert="layout :: navbarFragment"> </div>
+
+    <div class="container">
+        <div th:if="${message}" class="container">
+            <div th:text="${message}"></div>
+        </div>
+        <form th:action="@{/registration}" method="post">
+            <div><label> User Name : <input type="text" name="username"/> </label></div>
+            <div><label> Password: <input type="password" name="password"/> </label></div>
+            <div><input type="submit" value="Зарегистрироваться"/></div>
+        </form>
+        <footer th:insert="layout :: footerFragment(${year})"></footer>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+
+
