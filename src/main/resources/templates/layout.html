@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     <title th:text="${title}"></title>
 </head>
 
@@ -28,8 +28,8 @@
                     <li><a href="/contact" class="nav-link px-2 text-white">Contact</a></li>
                 </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                    <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" th:action="@{/search}" method="get">
+                    <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search" name="keyword" th:value="${keyword}" >
                 </form>
 
                 <div class="text-end">

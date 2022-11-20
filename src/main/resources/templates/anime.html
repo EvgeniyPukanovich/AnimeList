@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head th:insert="layout :: headerFragment(${anime.getName()})"></head>
+
+<body>
+<div th:insert="layout :: navbarFragment"> </div>
+
+<div class="container body-content">
+    <div>
+        <img class="center-block" th:src="${anime.getImageUrl()}">
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${anime.getName()}"/>
+            <td th:text="${anime.getStatus()}"/>
+            <td th:text="${anime.getStartDate()}"/>
+            <td th:text="${anime.getEndDate()}"/>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="/static/scripts/jquery-1.10.2.js"></script>
+<script src="/static/scripts/bootstrap.js"></script>
+<script src="/static/scripts/respond.js"></script>
+
+</body>
+</html>

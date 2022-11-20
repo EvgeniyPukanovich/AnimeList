@@ -6,10 +6,7 @@ import com.example.animelist.services.MALParserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,30 +17,35 @@ public class AnimeController {
     private final MALParserService malParserService;
 
     @Autowired
-    public AnimeController(AnimeService animeService, MALParserService malParserService){
+    public AnimeController(AnimeService animeService, MALParserService malParserService) {
         this.animeService = animeService;
         this.malParserService = malParserService;
     }
 
     @GetMapping("/animes")
-    @ResponseBody
-    public List<Anime> getAllAnime(){
-        return animeService.getAnimes();
+    public String getAllAnime(Model model) {
+        model.addAttribute("animes", animeService.getAnimes());
+        return "animes";
     }
 
     @GetMapping("/anime/{id}")
-    @ResponseBody
-    public Anime getAllAnime(@PathVariable Long id){
-        return animeService.getAnimeById(id);
+    public String getAllAnime(Model model, @PathVariable Long id) {
+        model.addAttribute("anime", animeService.getAnimeById(id));
+        return "anime";
     }
 
-    @GetMapping("/anime")
-    @ResponseBody
-    public List<Anime> getAllAnime(@RequestParam(value="name") String url){
-        return animeService.getAnimeByUrl(url);
+    @RequestMapping(path = {"/search"})
+    public String search(Model model, String keyword) {
+        if (keyword != null) {
+            List<Anime> list = animeService.getAnimeByUrl(keyword);
+            model.addAttribute("animes", list);
+        }
+        return "animes";
     }
 
     @GetMapping("/parse")
-    public void parse(){malParserService.sendRequest();}
+    public void parse() {
+        malParserService.sendRequest();
+    }
 
 }

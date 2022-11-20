@@ -1,8 +1,11 @@
 package com.example.animelist.models;
 
+import com.example.animelist.DateUtils;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -18,7 +21,6 @@ public class Anime {
     private String imageUrl;
 
     public Anime(){
-
     }
 
     public Anime(String name, String url, String status, Date startDate, Date endDate, String imageUrl) {
@@ -46,12 +48,12 @@ public class Anime {
         return status;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public String getStartDate() {
+        return DateUtils.getShortDate(startDate);
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public String getEndDate() {
+        return DateUtils.getShortDate(endDate);
     }
 
     public String getImageUrl() {
