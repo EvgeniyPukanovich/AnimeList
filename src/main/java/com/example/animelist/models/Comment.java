@@ -3,13 +3,15 @@ package com.example.animelist.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Comment {
     @Id
     @GeneratedValue
     private long id;
-    private long userId;
+    @ManyToOne
+    private User user;
     private long animeId;
     private String message;
 
@@ -17,8 +19,8 @@ public class Comment {
 
     }
 
-    public Comment(long userId, long animeId, String message) {
-        this.userId = userId;
+    public Comment(User user, long animeId, String message) {
+        this.user = user;
         this.animeId = animeId;
         this.message = message;
     }
@@ -31,12 +33,12 @@ public class Comment {
         this.id = id;
     }
 
-    public long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public long getAnimeId() {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <html>
 <head th:fragment="headerFragment(title)">
     <!-- Required meta tags -->
@@ -33,12 +34,25 @@
                 </form>
 
                 <div class="text-end">
-                    <a href="/login">
-                        <button type="button" class="btn btn-outline-light me-2">Login</button>
-                    </a>
-                    <a href="/registration">
-                        <button type="button" class="btn btn-warning">Sign-up</button>
-                    </a>
+                    <div sec:authorize="!isAuthenticated()">
+                        <a href="/login">
+                            <button type="button" class="btn btn-outline-light me-2">Login</button>
+                        </a>
+                        <a href="/registration">
+                            <button type="button" class="btn btn-warning">Sign-up</button>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a href="/user">
+                            <button type="button" class="btn btn-warning" th:text="${#authentication.getPrincipal().getUsername()}">
+                            </button>
+                        </a>
+                        <a href="/logout" methods="POST">
+                            <button type="button" class="btn btn-warning" >
+                                Logout
+                            </button>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

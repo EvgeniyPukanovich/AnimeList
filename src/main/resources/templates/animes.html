@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <html>
 <head th:insert="layout :: headerFragment(animes)"></head>
 
@@ -8,26 +9,27 @@
 
 <div class="container body-content">
 
-<table class="table">
-    <thead>
-    <tr>
-        <th></th>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="anime: ${animes}">
-        <td><img th:src="${anime.getImageUrl()}" height=100 width=100></td>
-        <td><a th:href="@{/anime/{id}(id = ${anime.getId()})}"><span th:text="${anime.getName()}"></span></a></td>
-        <td th:text="${anime.getStatus()}"/>
-        <td th:text="${anime.getStartDate()}"/>
-        <td th:text="${anime.getEndDate()}"/>
-    </tr>
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="anime: ${animes}">
+            <td><img th:src="${anime.getImageUrl()}" height=100 width=100></td>
+            <td><a th:href="@{/anime/{id}(id = ${anime.getId()})}"><span th:text="${anime.getName()}"></span></a></td>
+            <td th:text="${anime.getStatus()}"/>
+            <td th:text="${anime.getStartDate()}"/>
+            <td th:text="${anime.getEndDate()}"/>
+        </tr>
+        </tbody>
+    </table>
+
 
 
 </div>

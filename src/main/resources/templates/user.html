@@ -8,7 +8,14 @@
 <div th:insert="layout :: navbarFragment"> </div>
 
 <div class="container body-content">
-    <!-- вставить текст -->
+    <h2 th:text="${username}"></h2>
+    <h4>Anime list:</h4>
+    <ul th:each="anime : ${animelist}">
+        <li>
+            <a th:href="@{/anime/{id}(id = ${anime.getId()})}" th:text="${anime.getName}"></a>
+        </li>
+    </ul>
+
     <footer th:insert="layout :: footerFragment(${year})"></footer>
 </div>
 

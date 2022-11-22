@@ -20,4 +20,8 @@ public class CommentService {
     public List<Comment> getCommentsForAnime(Long animeId){
         return commentRepository.findByAnimeId(animeId);
     }
+
+    public void saveComment(Comment comment){
+        commentRepository.save(comment);
+    }
 }

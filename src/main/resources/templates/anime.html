@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <html>
 <head th:insert="layout :: headerFragment(${anime.getName()})"></head>
 
@@ -29,6 +30,36 @@
         </tr>
         </tbody>
     </table>
+
+    <div sec:authorize="isAuthenticated()" class="mt-2">
+        <a th:href="@{/add_anime(id=${anime.getId()})}">
+            <button type="button" class="btn btn-warning" >
+                Add to my list
+            </button>
+        </a>
+        <div>
+            <form action=# th:action="@{/new_comment}" method="POST">
+                <p>
+                    <label>Comment:</label>
+                    <br />
+                    <textarea name="message" cols="50" rows="6"></textarea>
+                </p>
+                <p>
+                    <input type="hidden" name="username" th:value="${#authentication.getPrincipal().getUsername()}" />
+                    <input type="hidden" name="animeId" th:value="${anime.getId()}">
+                    <input type="submit" value="Send" />
+                </p>
+            </form>
+        </div>
+    </div>
+    <div class="mt-2">
+        <h3>Comments</h3>
+        <div th:each="comment: ${comments}" class="bg-light px-1">
+            <h5><a th:href="@{/user/{id}(id = ${comment.getUser().getUsername()})}"><span
+                    th:text="${comment.getUser().getUsername()}"></span></a></h5>
+            <p th:text="${comment.getMessage()}"></p>
+        </div>
+    </div>
 </div>
 
 <script src="/static/scripts/jquery-1.10.2.js"></script>

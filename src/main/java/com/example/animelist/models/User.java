@@ -38,6 +38,10 @@ public class User{
         roles.add(role);
     }
 
+    public void addAnime(Anime anime){
+        this.animeList.add(anime);
+    }
+
     public Long getId() {
         return id;
     }
