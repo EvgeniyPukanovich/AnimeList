@@ -8,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.Year;
-
 @Controller
 public class RegistrationController {
     private final UserService userService;
@@ -42,7 +40,7 @@ public class RegistrationController {
     public String addUser(User user, Model model)
     {
         try{
-            userService.addUser(user);
+            userService.saveUser(user);
             return "redirect:/login";
         }
         catch (Exception e){

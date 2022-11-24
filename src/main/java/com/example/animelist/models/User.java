@@ -19,15 +19,15 @@ public class User{
     private String information;
     private boolean active;
 
-    @ElementCollection
-    @CollectionTable(name = "user_animes", joinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany
+    @JoinTable(name = "user_animes", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "anime_id"))
     List<Anime> animeList = new ArrayList<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
-
     public User(){
 
     }
