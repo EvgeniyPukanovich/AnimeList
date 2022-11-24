@@ -2,11 +2,11 @@ package com.example.animelist.models;
 
 import com.example.animelist.DateUtils;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Anime {
@@ -14,22 +14,28 @@ public class Anime {
     @GeneratedValue
     private Long id;
     private String name;
-    private String url;
     private String status;
     private Date startDate;
     private Date endDate;
     private String imageUrl;
+    private Integer numberOfEpisodes;
+
+    @ElementCollection
+    @CollectionTable(name = "anime_genres", joinColumns = @JoinColumn(name = "anime_id"))
+    private Set<String> genres = new HashSet<>();
 
     public Anime(){
     }
 
-    public Anime(String name, String url, String status, Date startDate, Date endDate, String imageUrl) {
+    public Anime(String name,  String status, Date startDate, Date endDate, String imageUrl,
+                 Integer numberOfEpisodes, Set<String> genres) {
         this.name = name;
-        this.url = url;
         this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
         this.imageUrl = imageUrl;
+        this.numberOfEpisodes = numberOfEpisodes;
+        this.genres = genres;
     }
 
     public Long getId() {
@@ -38,10 +44,6 @@ public class Anime {
 
     public String getName() {
         return name;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public String getStatus() {
@@ -59,4 +61,8 @@ public class Anime {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public Integer getNumberOfEpisodes() {return numberOfEpisodes;}
+
+    public Set<String> getGenres() {return  genres;}
 }

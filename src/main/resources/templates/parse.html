@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head th:insert="layout :: headerFragment(Parse)"></head>
+
+<body>
+<div th:insert="layout :: navbarFragment"> </div>
+
+<div class="mx-auto container">
+    <form th:action="@{/parse}" method="post">
+        <div><label> Number of animes to parse: <input type="number" name="count"/> </label></div>
+        <div><input type="submit" value="Parse MAL database"/></div>
+    </form>
+</div>
+<div th:if="${response != null && response}">
+    <div>Parsing was successful</div>
+</div>
+<div th:if="${response != null && !response}">
+    <div>Parsing was unsuccessful</div>
+</div>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+
+

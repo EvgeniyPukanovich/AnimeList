@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class AnimeService {
@@ -26,13 +27,14 @@ public class AnimeService {
     }
 
     public Anime getAnimeById(Long id){
-        return animeRepository.findById(id).get();
+        return animeRepository.findById(id).orElse(null);
     }
 
-    public List<Anime> getAnimeByUrl(String url) {return animeRepository.findByUrl(url).get();}
+    public List<Anime> getAnimeByUrl(String url) {return animeRepository.findByName(url);}
 
-    public void saveAnime(String name, String url, String status, Date airedOn, Date releasedOn, String imageUrl){
-        Anime anime = new Anime(name, url, status, airedOn, releasedOn, imageUrl);
+    public void saveAnime(String name, String status, Date airedOn, Date releasedOn, String imageUrl,
+                          Integer numberOfEpisodes, Set<String> genres){
+        Anime anime = new Anime(name, status, airedOn, releasedOn, imageUrl, numberOfEpisodes, genres);
         animeRepository.save(anime);
     }
 }

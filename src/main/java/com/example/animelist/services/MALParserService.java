@@ -1,24 +1,20 @@
 package com.example.animelist.services;
 
-
 import com.example.animelist.MALDTOs.Data;
-import com.example.animelist.MALDTOs.MainPicture;
 import com.example.animelist.MALDTOs.Node;
 import com.example.animelist.models.Anime;
 import com.example.animelist.repositories.AnimeRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -27,17 +23,15 @@ public class MALParserService {
 
     private final AnimeRepository animeRepository;
 
-    private final Logger logger = LoggerFactory.getLogger(MALParserService.class);
-
     @Autowired
     public MALParserService(AnimeRepository animeRepository) {
         this.animeRepository = animeRepository;
     }
 
-    public void sendRequest() {
+    public Boolean sendRequest(Integer count) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.myanimelist.net/v2/anime?q=An+Anime+Title&limit=20&offset=0&fields=status,start_date,end_date"))
+                .uri(URI.create("https://api.myanimelist.net/v2/anime?q=An+Anime+Title&limit=%s&offset=0&fields=status,start_date,end_date,genres,num_episodes".formatted(count)))
                 .setHeader("X-MAL-Client-ID", "6114d00ca681b7701d1e15fe11a4987e")
                 .setHeader("Authorization", "Barer " + accessToken)
                 .build();
@@ -53,23 +47,27 @@ public class MALParserService {
             List<Data> dataAnimes = objectMapper.readValue(data, new TypeReference<>() {
             });
             SaveAnimes(dataAnimes);
-            logger.debug("TECT");
+            return true;
         } catch (Exception ex) {
-            logger.error(ex.getMessage());
+            return false;
         }
     }
 
     private void SaveAnimes(List<Data> animes) {
         for (Data dataAnime : animes) {
             Node anime = dataAnime.node;
+            HashSet<String> genres = new HashSet<>(anime.genres.stream().map(x -> x.name).toList());
 
             Anime ourAnime = new Anime(anime.title,
-                    anime.title,
                     anime.status,
                     anime.start_date,
                     anime.end_date,
-                    anime.main_picture.large);
-            animeRepository.save(ourAnime);
+                    anime.main_picture.large,
+                    anime.num_episodes,
+                    genres);
+
+            if (!animeRepository.existsAnimeByName(anime.title))
+                animeRepository.save(ourAnime);
         }
     }
 }

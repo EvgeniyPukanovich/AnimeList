@@ -63,8 +63,13 @@ public class AnimeController {
     }
 
     @GetMapping("/parse")
-    public void parse() {
-        malParserService.sendRequest();
+    public String parse(Model model) {
+        return "parse";
     }
 
+    @PostMapping("/parse")
+    public String parse(Model model, @RequestParam Integer count) {
+        model.addAttribute("response", malParserService.sendRequest(count));
+        return "parse";
+    }
 }

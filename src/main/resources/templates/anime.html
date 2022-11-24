@@ -19,6 +19,8 @@
             <th>Status</th>
             <th>Start Date</th>
             <th>End Date</th>
+            <th>Number Of Episodes</th>
+            <th>Genres</th>
         </tr>
         </thead>
         <tbody>
@@ -27,6 +29,8 @@
             <td th:text="${anime.getStatus()}"/>
             <td th:text="${anime.getStartDate()}"/>
             <td th:text="${anime.getEndDate()}"/>
+            <td th:text="${anime.getNumberOfEpisodes()}"/>
+            <td th:text="${anime.getGenres()}"/>
         </tr>
         </tbody>
     </table>
