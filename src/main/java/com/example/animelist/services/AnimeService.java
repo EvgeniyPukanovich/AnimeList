@@ -3,6 +3,7 @@ package com.example.animelist.services;
 import com.example.animelist.models.Anime;
 import com.example.animelist.repositories.AnimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -30,11 +31,19 @@ public class AnimeService {
         return animeRepository.findById(id).orElse(null);
     }
 
-    public List<Anime> getAnimeByUrl(String url) {return animeRepository.findByName(url);}
+    public List<Anime> getAnimeByName(String name) {return animeRepository.findByName(name);}
 
     public void saveAnime(String name, String status, Date airedOn, Date releasedOn, String imageUrl,
                           Integer numberOfEpisodes, Set<String> genres){
         Anime anime = new Anime(name, status, airedOn, releasedOn, imageUrl, numberOfEpisodes, genres);
         animeRepository.save(anime);
+    }
+
+    public void saveAnime(Anime anime){
+        animeRepository.save(anime);
+    }
+
+    public List<Anime>  findAnimesBySpec(Specification<Anime> animeSpec){
+        return animeRepository.findAll(animeSpec);
     }
 }

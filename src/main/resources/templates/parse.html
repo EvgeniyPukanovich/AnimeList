@@ -4,20 +4,37 @@
 <head th:insert="layout :: headerFragment(Parse)"></head>
 
 <body>
-<div th:insert="layout :: navbarFragment"> </div>
+<div th:insert="layout :: navbarFragment"></div>
 
 <div class="mx-auto container">
+    <p></p>
+
     <form th:action="@{/parse}" method="post">
         <div><label> Number of animes to parse: <input type="number" name="count"/> </label></div>
         <div><input type="submit" value="Parse MAL database"/></div>
     </form>
+
+    <div th:if="${response != null && response}">
+        <div>Parsing was successful</div>
+    </div>
+    <div th:if="${response != null && !response}">
+        <div>Parsing was unsuccessful</div>
+    </div>
+
+    <p></p>
+    <form th:action="@{/addAnime}" method="post">
+        <div><label> Name : <input type="text" name="name"/> </label></div>
+        <div><label> Status: <input type="text" name="status"/> </label></div>
+        <div><label> Start Date : <input type="date" name="startDate"/> </label></div>
+        <div><label> End Date: <input type="date" name="endDate"/> </label></div>
+        <div><label> Image Url : <input type="text" name="imageUrl"/> </label></div>
+        <div><label> Number Of Episodes: <input type="number" name="numberOfEpisodes"/> </label></div>
+        <div><label> Genres: <input type="text" name="genres"/> </label></div>
+        <div><input type="submit" value="Add"/></div>
+    </form>
+
 </div>
-<div th:if="${response != null && response}">
-    <div>Parsing was successful</div>
-</div>
-<div th:if="${response != null && !response}">
-    <div>Parsing was unsuccessful</div>
-</div>
+
 
 <script src="js/bootstrap.bundle.min.js"></script>
 

@@ -7,6 +7,8 @@ public class DateUtils {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
     public static String getShortDate(Date date) {
-        return formatter.format(date);
+        if(date != null)
+            return formatter.format(date);
+        return null;
     }
 }
