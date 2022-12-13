@@ -53,9 +53,14 @@ public class UserService implements UserDetailsService {
     }
 
     public void addAnimeToUser(User user, Anime anime){
-        if (user.getAnimeList().contains(anime))
+        if (user.getAnimeList().containsKey(anime))
             return;
         user.addAnime(anime);
+        userRepository.save(user);
+    }
+
+    public void updateEpisodes(User user, Anime anime, Integer newValue){
+        user.getAnimeList().put(anime, newValue);
         userRepository.save(user);
     }
 }

@@ -10,11 +10,33 @@
 <div class="container body-content">
     <h2 th:text="${username}"></h2>
     <h4>Anime list:</h4>
-    <ul th:each="anime : ${animelist}">
-        <li>
-            <a th:href="@{/anime/{id}(id = ${anime.getId()})}" th:text="${anime.getName}"></a>
-        </li>
-    </ul>
+    <table class="table">
+        <thead>
+            <th></th>
+            <th>Anime title</th>
+            <th>Episodes watched</th>
+        </thead>
+        <tbody>
+            <tr th:each="entry : ${animelist}">
+                <td><img th:src="${entry.key.getImageUrl()}" height=100 width=100></td>
+                <td>
+                    <a th:href="@{/anime/{id}(id = ${entry.key.getId()})}" th:text="${entry.key.getName}"></a>
+                </td>
+                <form th:action="@{/update_episodes}" method="POST">
+                    <input type="hidden" name="username" th:value="${username}">
+                    <input type="hidden" name="animeId" th:value="${entry.key.getId()}">
+                    <td>
+                        <input type="number" name="newValue" min="0" th:max="${entry.key.getNumberOfEpisodes()}" th:value="${entry.value}">
+                        <span th:text="'/' + ${entry.key.getNumberOfEpisodes()}"></span>
+                    </td>
+                    <td>
+                        <input type="submit" value="Update episodes" hidden>
+                    </td>
+                </form>
+
+            </tr>
+        </tbody>
+    </table>
 
     <footer th:insert="layout :: footerFragment(${year})"></footer>
 </div>

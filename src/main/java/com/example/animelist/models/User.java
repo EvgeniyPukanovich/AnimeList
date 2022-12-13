@@ -3,10 +3,7 @@ package com.example.animelist.models;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="my_users")
@@ -19,15 +16,17 @@ public class User{
     private String information;
     private boolean active;
 
-    @ManyToMany
-    @JoinTable(name = "user_animes", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "anime_id"))
-    List<Anime> animeList = new ArrayList<>();
+    @ElementCollection
+    @MapKeyColumn(name = "anime_id")
+    @CollectionTable(name = "user_animes", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
+    @Column(name = "episodes_watched")
+    Map<Anime, Integer> animeList = new HashMap<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
+
     public User(){
 
     }
@@ -39,7 +38,7 @@ public class User{
     }
 
     public void addAnime(Anime anime){
-        this.animeList.add(anime);
+        this.animeList.putIfAbsent(anime, 0);
     }
 
     public Long getId() {
@@ -90,11 +89,11 @@ public class User{
         this.information = information;
     }
 
-    public List<Anime> getAnimeList() {
+    public Map<Anime, Integer> getAnimeList() {
         return animeList;
     }
 
-    public void setAnimeList(List<Anime> animeList) {
+    public void setAnimeList(Map<Anime, Integer> animeList) {
         this.animeList = animeList;
     }
 }

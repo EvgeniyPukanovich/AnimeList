@@ -38,7 +38,7 @@ public class UserController {
             return "redirect:/login";
         User user = userService.getUser(principal.getName());
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("animelist", user.getAnimeList().toArray());
+        model.addAttribute("animelist", user.getAnimeList());
         return "user";
     }
 
@@ -48,6 +48,15 @@ public class UserController {
         if (principal==null) return "redirect:/login";
         User user = userService.getUser(principal.getName());
         userService.addAnimeToUser(user, anime);
+        return "redirect:/user";
+    }
+
+    @PostMapping("/update_episodes")
+    public String updateEpisodes(@RequestParam String username, @RequestParam Long animeId,
+                                 @RequestParam Integer newValue){
+        User user = userService.getUser(username);
+        Anime anime = animeService.getAnimeById(animeId);
+        userService.updateEpisodes(user, anime, newValue);
         return "redirect:/user";
     }
 }
