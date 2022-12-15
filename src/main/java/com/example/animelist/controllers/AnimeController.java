@@ -4,10 +4,7 @@ import com.example.animelist.models.Anime;
 import com.example.animelist.models.Comment;
 import com.example.animelist.models.User;
 import com.example.animelist.services.*;
-import net.kaczmarzyk.spring.data.jpa.domain.Between;
-import net.kaczmarzyk.spring.data.jpa.domain.GreaterThan;
-import net.kaczmarzyk.spring.data.jpa.domain.LessThan;
-import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.domain.*;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
@@ -95,7 +92,7 @@ public class AnimeController {
                     @Spec(path = "endDate", spec = LessThan.class),
                     @Spec(path = "numberOfEpisodes",
                             params = {"episodesFrom", "episodesTo"}, spec = Between.class),
-                    @Spec(path = "g.name", params = "genre", spec = Like.class)
+                    @Spec(path = "g.name", params = "genre", spec = In.class)
             }) Specification<Anime> animeSpec,
             Model model) {
         var animes = animeService.findAnimesBySpec(animeSpec);

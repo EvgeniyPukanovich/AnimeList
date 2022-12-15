@@ -33,7 +33,7 @@
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">Genres</label>
-            <select class="form-control" id="exampleFormControlSelect1" name="genre">
+            <select class="form-control" id="exampleFormControlSelect1" name="genre" multiple>
                 <option th:each="option : ${genres}" th:value="${option.getName()}" th:text="${option.getName()}"></option>
             </select>
         </div>
