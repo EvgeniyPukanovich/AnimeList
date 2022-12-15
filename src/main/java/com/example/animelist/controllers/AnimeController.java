@@ -3,15 +3,13 @@ package com.example.animelist.controllers;
 import com.example.animelist.models.Anime;
 import com.example.animelist.models.Comment;
 import com.example.animelist.models.User;
-import com.example.animelist.services.AnimeService;
-import com.example.animelist.services.CommentService;
-import com.example.animelist.services.MALParserService;
-import com.example.animelist.services.UserService;
+import com.example.animelist.services.*;
 import net.kaczmarzyk.spring.data.jpa.domain.Between;
-import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.GreaterThan;
 import net.kaczmarzyk.spring.data.jpa.domain.LessThan;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,12 +17,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -35,18 +31,22 @@ public class AnimeController {
     private final CommentService commentService;
     private final UserService userService;
 
+    private final GenreService genreService;
+
     @Autowired
     public AnimeController(AnimeService animeService, MALParserService malParserService,
-                           CommentService commentService, UserService userService) {
+                           CommentService commentService, UserService userService, GenreService genreService) {
         this.animeService = animeService;
         this.malParserService = malParserService;
         this.commentService = commentService;
         this.userService = userService;
+        this.genreService = genreService;
     }
 
     @GetMapping("/animes")
     public String getAllAnime(Model model) {
         model.addAttribute("animes", animeService.getAnimes());
+        model.addAttribute("genres", genreService.getGenres());
         return "animes";
     }
 
@@ -89,15 +89,18 @@ public class AnimeController {
 
     @PostMapping("/animes")
     public String filter(
+            @Join(path = "genres", alias = "g")
             @And({
                     @Spec(path = "startDate", spec = GreaterThan.class),
                     @Spec(path = "endDate", spec = LessThan.class),
                     @Spec(path = "numberOfEpisodes",
-                            params = {"episodesFrom", "episodesTo"}, spec = Between.class)
+                            params = {"episodesFrom", "episodesTo"}, spec = Between.class),
+                    @Spec(path = "g.name", params = "genre", spec = Like.class)
             }) Specification<Anime> animeSpec,
             Model model) {
         var animes = animeService.findAnimesBySpec(animeSpec);
         model.addAttribute("animes", animes);
+        model.addAttribute("genres", genreService.getGenres());
         return "animes";
     }
 
@@ -113,7 +116,7 @@ public class AnimeController {
                            @RequestParam String genres) {
 
         animeService.saveAnime(name, status, startDate, endDate, imageUrl, numberOfEpisodes,
-                new HashSet<>(Arrays.stream(genres.split(",")).toList()));
+               Arrays.stream(genres.split(",")).toList());
         return "parse";
     }
 }

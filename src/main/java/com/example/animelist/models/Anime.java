@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,15 +21,14 @@ public class Anime {
     private String imageUrl;
     private Integer numberOfEpisodes;
 
-    @ElementCollection
-    @CollectionTable(name = "anime_genres", joinColumns = @JoinColumn(name = "anime_id"))
-    private Set<String> genres = new HashSet<>();
+    @ManyToMany
+    private List<Genre> genres;
 
     public Anime(){
     }
 
     public Anime(String name,  String status, Date startDate, Date endDate, String imageUrl,
-                 Integer numberOfEpisodes, Set<String> genres) {
+                 Integer numberOfEpisodes, List<Genre> genres) {
         this.name = name;
         this.status = status;
         this.startDate = startDate;
@@ -64,5 +64,5 @@ public class Anime {
 
     public Integer getNumberOfEpisodes() {return numberOfEpisodes;}
 
-    public Set<String> getGenres() {return  genres;}
+    public List<String> getGenres() {return  genres.stream().map(Genre::getName).toList();}
 }

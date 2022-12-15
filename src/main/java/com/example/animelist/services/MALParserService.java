@@ -21,11 +21,11 @@ import java.util.List;
 public class MALParserService {
     private final String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjU3ZmIxNDVkMjk0ZGYyODYxYjUxYzRiN2NmN2E5YjAzYTE0MzNhMzlhZTIxMjZkYjc3MDllNjU1MTBlODM4Y2FkMDkwNWRlZjZkOTMyZWUxIn0.eyJhdWQiOiI2MTE0ZDAwY2E2ODFiNzcwMWQxZTE1ZmUxMWE0OTg3ZSIsImp0aSI6IjU3ZmIxNDVkMjk0ZGYyODYxYjUxYzRiN2NmN2E5YjAzYTE0MzNhMzlhZTIxMjZkYjc3MDllNjU1MTBlODM4Y2FkMDkwNWRlZjZkOTMyZWUxIiwiaWF0IjoxNjY3Mzg4OTIyLCJuYmYiOjE2NjczODg5MjIsImV4cCI6MTY2OTk4NDUyMiwic3ViIjoiMTU4MTI5NzEiLCJzY29wZXMiOltdfQ.ZDDbr9-doiEGgfYJ1r88ifzlubGy9hgM7l9I7LF7jp4RktwIjnJMCEkATpNCqy7CblWzUAbsK6xx4SEonQD8aTetfyd4ooU23RKGf-MJoUcJg_sYhOkGal-O9WjTwsfiesh0Vm3GFkoxhJCLEa6vaXI3RH2BeirH4QjlSUU79B09yaVCF5KgRnR7H9bxBH0GhfLmFAXBCMwBI6RHRNsDqt9gEDLkXFPoDBhMcWfnTfBOs-yJxRq2DaSCJeXUDJbfugw8iMqF6ga3YdySlv3DrTiYiGmhe2446wVyt35myflG53g5T9rptCcSZrsvjqagUmo8hp1MX9a0uyDOu9HgyA";
 
-    private final AnimeRepository animeRepository;
+    private final AnimeService animeService;
 
     @Autowired
-    public MALParserService(AnimeRepository animeRepository) {
-        this.animeRepository = animeRepository;
+    public MALParserService(AnimeService animeService) {
+        this.animeService = animeService;
     }
 
     public Boolean sendRequest(Integer count) {
@@ -56,18 +56,15 @@ public class MALParserService {
     private void SaveAnimes(List<Data> animes) {
         for (Data dataAnime : animes) {
             Node anime = dataAnime.node;
-            HashSet<String> genres = new HashSet<>(anime.genres.stream().map(x -> x.name).toList());
+            List<String> genres = anime.genres.stream().map(x -> x.name).toList();
 
-            Anime ourAnime = new Anime(anime.title,
+            animeService.saveAnime(anime.title,
                     anime.status,
                     anime.start_date,
                     anime.end_date,
                     anime.main_picture.large,
                     anime.num_episodes,
                     genres);
-
-            if (!animeRepository.existsAnimeByName(anime.title))
-                animeRepository.save(ourAnime);
         }
     }
 }

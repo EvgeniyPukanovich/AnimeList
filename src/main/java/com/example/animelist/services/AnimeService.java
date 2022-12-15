@@ -1,6 +1,7 @@
 package com.example.animelist.services;
 
 import com.example.animelist.models.Anime;
+import com.example.animelist.models.Genre;
 import com.example.animelist.repositories.AnimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,16 +10,18 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class AnimeService {
 
     private final AnimeRepository animeRepository;
 
+    private final GenreService genreService;
+
     @Autowired
-    public AnimeService(AnimeRepository animeRepository){
+    public AnimeService(AnimeRepository animeRepository, GenreService genreService){
         this.animeRepository = animeRepository;
+        this.genreService = genreService;
     }
 
     public List<Anime> getAnimes(){
@@ -34,9 +37,11 @@ public class AnimeService {
     public List<Anime> getAnimeByName(String name) {return animeRepository.findByName(name);}
 
     public void saveAnime(String name, String status, Date airedOn, Date releasedOn, String imageUrl,
-                          Integer numberOfEpisodes, Set<String> genres){
-        Anime anime = new Anime(name, status, airedOn, releasedOn, imageUrl, numberOfEpisodes, genres);
-        animeRepository.save(anime);
+                          Integer numberOfEpisodes, List<String> genres){
+        List<Genre> genresObjs = genres.stream().map(genreService::getOrCreate).toList();
+        Anime anime = new Anime(name, status, airedOn, releasedOn, imageUrl, numberOfEpisodes, genresObjs);
+        if (!animeRepository.existsAnimeByName(name))
+            animeRepository.save(anime);
     }
 
     public void saveAnime(Anime anime){
