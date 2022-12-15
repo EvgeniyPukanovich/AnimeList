@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Objects;
 
 @Controller
 public class UserController {
@@ -53,10 +54,12 @@ public class UserController {
 
     @PostMapping("/update_episodes")
     public String updateEpisodes(@RequestParam String username, @RequestParam Long animeId,
-                                 @RequestParam Integer newValue){
+                                 @RequestParam Integer newValue, Principal principal){
+        if (!Objects.equals(principal.getName(), username))
+            return "redirect:/user/"+username;
         User user = userService.getUser(username);
         Anime anime = animeService.getAnimeById(animeId);
         userService.updateEpisodes(user, anime, newValue);
-        return "redirect:/user";
+        return "redirect:/user/"+username;
     }
 }

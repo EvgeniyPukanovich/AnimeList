@@ -24,8 +24,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
-                .antMatchers("/parse", "/user/*").hasRole("ADMIN")
-                .antMatchers("/new_comment", "/add_anime").hasRole("USER")
+                .antMatchers("/parse").hasRole("ADMIN")
+                .antMatchers("/new_comment", "/add_anime", "/user/*").hasRole("USER")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin((form) -> form
